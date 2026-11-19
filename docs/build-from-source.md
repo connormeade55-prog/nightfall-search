@@ -4,9 +4,9 @@ Nightfall is planned as an independently branded desktop browser based on the op
 
 ## Before starting
 
-Brave's current Linux guide lists Git 2.41+, Python 3, and Node.js 24+ as prerequisites. A supported Linux build environment is also required. Chromium's source checkout can use tens of gigabytes of storage, and compiling can take hours and require substantial RAM.
+Brave's current Linux guide lists Git 2.41+, Python 3, and Node.js 24+ as prerequisites. The build also requires pnpm, a supported Linux environment, Debian package tools (`dpkg-deb`), substantial free storage, and plenty of RAM. Chromium's source checkout can use tens of gigabytes of storage, and compiling can take hours.
 
-A Chromebook's Linux container is not assumed to be powerful enough to compile the browser. A separate Linux build machine or CI runner is likely the practical first build host. ARM64 support will need its own build and device testing; an x86_64 build will not run on an ARM Chromebook.
+A Chromebook's Linux container is not assumed to be powerful enough to compile the browser. A separate Linux build machine is likely the practical first build host. ARM64 support requires a separate target build and device testing; an x86_64 build will not run on an ARM Chromebook.
 
 ## 1. Read the current upstream requirements
 
@@ -17,77 +17,46 @@ A Chromebook's Linux container is not assumed to be powerful enough to compile t
 
 Upstream requirements and commands can change. Follow the current Brave guide if it differs from this document.
 
-## 2. Clone the upstream source
+## 2. Build and package
 
 From a local clone of this Nightfall Search repository, run:
 
 ```bash
-bash scripts/bootstrap-brave.sh
+bash scripts/build-nightfall-linux.sh
 ```
 
-The script checks for Git, Node.js, Python 3, and pnpm, then clones the official `brave-core` repository into `src/brave/`. It does not download Chromium or start a build.
+The script performs these steps:
 
-You can also clone it manually:
+1. Checks for Git, Node.js, Python 3, pnpm, and `dpkg-deb`.
+2. Clones Brave Core into `src/brave/` if it is not already present.
+3. Installs Brave Core's JavaScript dependencies with `pnpm install`.
+4. Runs `pnpm run init`, which downloads Chromium and its dependencies.
+5. Runs Brave's documented Linux Release packaging command: `pnpm run create_dist Release`.
+6. Finds the generated Debian package and calls `scripts/package-nightfall-linux.sh` to insert the Nightfall `initial_preferences` file beside the installed browser executable.
+7. Writes the repackaged Debian package under `dist/`.
+
+Initialization is a very large download. Do not run this on a device without enough storage, memory, and a reliable connection. Run as a normal user, not root, as the upstream guide warns that initialization may fail when run as root.
+
+## 3. Package homepage preferences separately
+
+If you already have an upstream Brave Debian package, you can apply the Nightfall startup defaults without repeating the full browser build:
 
 ```bash
-mkdir -p src
-git clone https://github.com/brave/brave-core.git src/brave
+bash scripts/package-nightfall-linux.sh path/to/brave-browser.deb
 ```
 
-Do not commit the upstream checkout into the Nightfall Search repository.
+The script extracts the package, locates the actual executable instead of assuming an install directory, installs `packaging/linux/initial_preferences` beside it, and rebuilds a Debian package under `dist/`. It stops if it cannot find the executable. The package's internal Debian package name and browser UI remain upstream Brave at this stage.
 
-## 3. Install and initialize upstream dependencies
+Chromium-based browsers generally read initial preferences when creating a profile for the first time. These are defaults, not remote controls: existing profiles may retain their settings, and users can change the homepage or startup behavior later.
 
-Review the current Brave instructions first. From the Nightfall repository:
+## 4. Current branding and build status
 
-```bash
-cd src/brave
-pnpm install
-pnpm run init
-```
+The current pipeline builds the upstream Brave Release package and integrates the Nightfall homepage defaults. It does **not** yet change all Brave product names, icons, dialogs, or other browser UI to Nightfall. That requires a separately maintained and reviewed branding patch set against the upstream source.
 
-Initialization downloads Chromium and its dependencies. Expect a very large download and long setup time. Do not run this on a device without enough storage, memory, and a reliable connection.
+The scripts have been committed but have not been executed in this environment. Chromium has not been downloaded here, and no package has been built or tested. Do not treat the existence of the scripts as proof of a successful build.
 
-On supported Debian/Ubuntu Linux systems, Brave's guide also documents a dependency-install step after initialization:
+## 5. Chromebook compatibility
 
-```bash
-./src/build/install-build-deps.sh
-```
+The initial pipeline targets the Linux package produced by the upstream build. x86_64 and ARM64 need separate build environments and outputs. Test on physical Chromebooks before claiming compatibility. Linux app support, device architecture, graphics, RAM, storage, and device-management policy all affect whether a package can run.
 
-Only run that command if the current upstream guide still recommends it for your Linux distribution.
-
-## 4. Build and launch
-
-After initialization and platform dependencies are installed, the upstream development commands are:
-
-```bash
-pnpm run build
-pnpm start
-```
-
-For a release build:
-
-```bash
-pnpm run build Release
-pnpm start Release
-```
-
-These commands build and launch upstream Brave. At this stage they do not yet produce a Nightfall-branded browser. Do not describe the result as Nightfall until Nightfall branding changes have been implemented and tested.
-
-## 5. Nightfall customization plan
-
-Keep Nightfall-specific work as a small, reviewable patch set rather than rewriting Chromium or copying the entire upstream tree into this repository.
-
-1. Create original Nightfall name, icons, colors, and startup experience.
-2. Identify supported upstream branding/configuration points.
-3. Apply changes without removing upstream security updates or license notices.
-4. Build and test a local development version.
-5. Add reproducible x86_64 packaging.
-6. Investigate ARM64 build and runtime support.
-7. Test on real, supported Chromebook models before claiming compatibility.
-
-Do not use Brave logos or imply that Nightfall is an official Brave product. Nightfall Search is independent and is not endorsed by Brave Software.
-
-## Current status
-
-This repository has a source-bootstrap script and build instructions. The script has not been run here, Chromium has not been downloaded, and no browser binary or installer has been built or tested yet.
+Do not try to bypass a device administrator's restrictions. If Linux development is disabled on a managed Chromebook, ask its administrator about approved development options.
