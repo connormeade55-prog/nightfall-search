@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080b14">
+  <meta name="description" content="Nightfall Search is an independently branded browser project focused on Chromebook compatibility.">
+  <title>Nightfall Search</title>
+  <style>
+    :root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#080b14;color:#edf1ff}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -20%,#26335b 0,transparent 55%),#080b14}
+    .wrap{width:min(960px,calc(100% - 40px));margin:auto;padding:28px 0 64px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0}
+    .brand{font-weight:800;letter-spacing:.08em;text-transform:uppercase}.brand span{color:#8ba7ff}
+    .tag{font-size:.8rem;color:#aab7da;border:1px solid #293554;border-radius:999px;padding:8px 12px}
+    main{padding:clamp(70px,13vw,140px) 0 80px;max-width:760px}
+    .eyebrow{color:#9bb0ff;font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+    h1{font-size:clamp(2.8rem,8vw,5.5rem);line-height:.98;letter-spacing:-.055em;margin:18px 0}
+    p{color:#b8c2dc;font-size:1.08rem;line-height:1.75;max-width:650px}
+    .status{display:inline-flex;align-items:center;gap:9px;margin-top:22px;padding:12px 15px;border:1px solid #34446e;border-radius:12px;background:#10182b;color:#dce5ff}
+    .dot{width:8px;height:8px;border-radius:50%;background:#f0c36a;box-shadow:0 0 12px #f0c36a}
+    .panel{margin-top:54px;border:1px solid #26314d;border-radius:18px;padding:24px;background:linear-gradient(135deg,#111a2d,#0c1220)}
+    h2{font-size:1.1rem;margin:0 0 10px}.small{font-size:.9rem;color:#94a2c2}
+    footer{border-top:1px solid #202a40;padding-top:22px;color:#7887a8;font-size:.82rem}
+    a{color:#a9bcff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header><div class="brand">✦ Nightfall <span>Search</span></div><div class="tag">Chromebook-first project</div></header>
+    <main>
+      <div class="eyebrow">A browser project in development</div>
+      <h1>Browse beyond<br>the ordinary.</h1>
+      <p>Nightfall Search is an independently branded browser project built around the goal of supporting as many Chromebook models as practical.</p>
+      <div class="status"><span class="dot" aria-hidden="true"></span><strong>Development status:</strong> browser builds are not available yet.</div>
+      <section class="panel">
+        <h2>Designed for broad Chromebook support</h2>
+        <p class="small">The project is preparing separate build targets for 64-bit Intel/AMD (x86_64) and 64-bit ARM (aarch64) devices. Older hardware may not support current browser requirements.</p>
+        <p class="small">This website is the project landing page. It does not itself provide browser functionality or install a browser.</p>
+      </section>
+    </main>
+    <footer>© <span id="year">2026</span> Nightfall Search · Independent project, not affiliated with Brave Software.</footer>
+  </div>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
