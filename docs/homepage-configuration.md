@@ -4,20 +4,34 @@ Nightfall's hosted homepage is:
 
 `https://nightfall-search.pages.dev/`
 
-The repository includes a Chromium-style `initial_preferences` JSON template at `packaging/linux/initial_preferences`. It requests that a newly created browser profile:
+The Chromium-style `initial_preferences` JSON template at `packaging/linux/initial_preferences` requests that a newly created browser profile:
 
 - use the Nightfall Pages URL as its homepage;
 - show the Home button;
 - open the Nightfall Pages URL on browser startup.
 
-## Important behavior
+## Packaging integration
 
-Chromium-based browsers generally consume initial preferences when creating a new profile for the first time. They are defaults, not a remote control: an existing user profile may keep its current preferences, and the user can change the homepage or startup pages later in browser settings.
+The Linux Debian packaging flow now includes the preference file:
 
-The JSON file is only a template at this stage. The Nightfall packaging/build process has not yet been implemented to install it in the correct Brave distribution directory. Do not claim that an existing Nightfall browser binary already opens this page automatically; no Nightfall browser binary has been built or tested yet.
+- `scripts/build-nightfall-linux.sh` runs the upstream Brave Release packaging process and then calls the Nightfall package integration script.
+- `scripts/package-nightfall-linux.sh` extracts the generated .deb, finds the installed Brave executable, places `initial_preferences` beside it, and rebuilds the .deb under `dist/`.
+- The package integration script deliberately fails if it cannot find the browser executable rather than guessing an installation directory.
+
+You can apply the preference file to an existing Brave Debian package with:
+
+```bash
+bash scripts/package-nightfall-linux.sh path/to/brave-browser.deb
+```
+
+## First-run behavior
+
+Chromium-based browsers generally consume initial preferences when creating a profile for the first time. They are defaults, not a remote control: an existing user profile may keep its current preferences, and the user can change the homepage or startup pages later in browser settings.
+
+## Current limitations
+
+The pipeline currently produces a repackaged upstream Brave Debian package with Nightfall homepage defaults. The internal package identity, application name, icons, and browser UI are still Brave; full Nightfall branding has not been implemented. The build scripts have not yet been run in this environment, so there is no verified Nightfall installer yet.
 
 ## Hosting
 
-Cloudflare Pages serves the homepage independently of the Chromebook. The browser needs an internet connection to load it. If the Pages site is unavailable, the browser's normal new-tab or fallback behavior depends on the final browser integration.
-
-The hosted page is a normal personal start page. It does not provide a remote Chromium engine or make the browser itself cloud-hosted.
+Cloudflare Pages serves the homepage independently of the Chromebook. The browser needs an internet connection to load it. If the Pages site is unavailable, fallback behavior depends on the browser's normal new-tab behavior.
