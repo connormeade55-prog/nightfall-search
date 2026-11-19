@@ -6,7 +6,7 @@ Nightfall Search is a planned, independently branded desktop browser project bas
 
 ## Website and Cloudflare
 
-A static project landing page is available in `public/` and is configured for Cloudflare Pages using `wrangler.toml`. See [Cloudflare deployment instructions](docs/cloudflare.md).
+A customizable Nightfall start page is available in `public/`. It includes a search-engine selector, editable quick links, and a light/dark theme toggle. Quick links and preferences are stored locally in the browser. It is a web start page, not the native browser interface or a proxy. Cloudflare Pages is configured using `wrangler.toml`; see [Cloudflare deployment instructions](docs/cloudflare.md).
 
 Cloudflare Pages hosts the website only. It does not run the native browser engine or produce Chromebook installers.
 
