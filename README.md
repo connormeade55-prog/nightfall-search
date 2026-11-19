@@ -2,7 +2,13 @@
 
 Nightfall Search is a planned, independently branded desktop browser project based on the open-source Brave Browser codebase. Its primary goal is broad compatibility across Chromebook models.
 
-> **Current status:** project scaffold only. This repository does not yet contain a compiled browser, a Brave source checkout, a working installer, or verified multi-architecture builds.
+> **Current status:** project scaffold plus a static landing page. This repository does not yet contain a compiled browser, a Brave source checkout, a working installer, or verified multi-architecture builds.
+
+## Website and Cloudflare
+
+A static project landing page is available in `public/` and is configured for Cloudflare Pages using `wrangler.toml`. See [Cloudflare deployment instructions](docs/cloudflare.md).
+
+Cloudflare Pages hosts the website only. It does not run the native browser engine or produce Chromebook installers.
 
 ## Compatibility goal
 
@@ -16,7 +22,7 @@ There cannot be a guarantee that one installer will work on literally every Chro
 
 See [Chromebook compatibility details](docs/chromebook.md) for how to check a device.
 
-## Planned features
+## Planned browser features
 
 - Brave's Chromium-based browser foundation.
 - Brave Shields protections, subject to upstream configuration and licensing.
@@ -34,7 +40,7 @@ See [Chromebook compatibility details](docs/chromebook.md) for how to check a de
 5. Test on physical Chromebooks from multiple device families and document known limitations.
 6. Publish packages only after the matching builds pass testing.
 
-See [Chromebook notes](docs/chromebook.md) and [upstream build notes](docs/build-from-source.md).
+See [Chromebook notes](docs/chromebook.md), [upstream build notes](docs/build-from-source.md), and [Cloudflare deployment instructions](docs/cloudflare.md).
 
 ## Upstream project and trademarks
 
