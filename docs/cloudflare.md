@@ -2,28 +2,50 @@
 
 This repository includes a static project landing page in `public/`. Cloudflare Pages can host that website. It cannot run the native Brave-based browser or turn the browser source into a Chromebook app.
 
-## Deploy with the Cloudflare dashboard
+## Important: use Pages, not Workers deploy
 
-1. Push this repository to GitHub.
-2. In the Cloudflare dashboard, open **Workers & Pages** and choose **Create application** → **Pages** → **Connect to Git**.
+The command `npx wrangler deploy` is for deploying a Worker. It is not the right command for this static Pages site and can fail with a missing Worker entry-point error.
+
+For this project, use the Pages command:
+
+```sh
+npx wrangler pages deploy public --project-name nightfall-search
+```
+
+The Pages project named `nightfall-search` must exist before running that command.
+
+## Deploy with Cloudflare Pages Git integration (recommended)
+
+1. In the Cloudflare dashboard, open **Workers & Pages**.
+2. Choose **Create application** → **Pages** → **Connect to Git**.
 3. Select `connormeade55-prog/nightfall-search` and the `main` branch.
 4. Use these build settings:
    - Framework preset: **None**
-   - Build command: leave blank
+   - Build command: leave blank (there is no build step for this plain HTML site)
    - Build output directory: `public`
    - Root directory: leave as the repository root
-5. Start the deployment. Cloudflare should publish the static files from `public/`.
+5. Save and deploy. Pages Git integration builds and publishes the static output; do not add `npx wrangler deploy` as a custom deploy command.
 
-## Deploy with Wrangler
+## If your Cloudflare setup asks for a deploy command
 
-Install Wrangler in a local development environment, authenticate with Cloudflare, then run:
+Some Workers Builds configurations show a separate **Deploy command** field. If you are using that workflow for this Pages project, replace `npx wrangler deploy` with:
+
+```sh
+npx wrangler pages deploy public --project-name nightfall-search
+```
+
+Keep the build command blank for this static site. If the dashboard is creating a Worker rather than a Pages project, go back and create a **Pages** project instead.
+
+## Deploy with Wrangler from a terminal
+
+Authenticate with Cloudflare, create the Pages project once, then deploy:
 
 ```sh
 npx wrangler pages project create nightfall-search
 npx wrangler pages deploy public --project-name nightfall-search
 ```
 
-The included `wrangler.toml` records the Pages output directory. Dashboard Git integration is the easiest option for automatic deployments on pushes to `main`.
+The included `wrangler.toml` records the Pages output directory.
 
 ## What is and is not deployed
 
