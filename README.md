@@ -6,9 +6,11 @@ Nightfall Search is a planned, independently branded desktop browser project bas
 
 ## Website and Cloudflare
 
-A customizable Nightfall start page is available in `public/`. It includes a search-engine selector, editable quick links, and a light/dark theme toggle. Quick links and preferences are stored locally in the browser. It is a web start page, not the native browser interface or a proxy. Cloudflare Pages is configured using `wrangler.toml`; see [Cloudflare deployment instructions](docs/cloudflare.md).
+The hosted Nightfall start page is **https://nightfall-search.pages.dev/**. It includes a search-engine selector, editable quick links, and a light/dark theme toggle. Quick links and preferences are stored locally in the browser. It is a web start page, not the native browser interface or a proxy. Cloudflare Pages is configured using `wrangler.toml`; see [Cloudflare deployment instructions](docs/cloudflare.md).
 
 Cloudflare Pages hosts the website only. It does not run the native browser engine or produce Chromebook installers.
+
+The browser's planned first-run homepage and startup page are configured in [the Linux initial preferences template](packaging/linux/initial_preferences). See [homepage configuration notes](docs/homepage-configuration.md). This is a configuration template; it is not yet wired into a completed Nightfall installer.
 
 ## Start browser development
 
@@ -46,11 +48,12 @@ See [Chromebook compatibility details](docs/chromebook.md) for how to check a de
 1. Establish the supported ChromeOS/Linux baseline and architecture matrix.
 2. Set up reproducible x86_64 and ARM64 build environments.
 3. Track Brave upstream and implement Nightfall branding as a maintainable patch set.
-4. Build, test, and sign each architecture's Linux package.
-5. Test on physical Chromebooks from multiple device families and document known limitations.
-6. Publish packages only after the matching builds pass testing.
+4. Wire the Nightfall first-run preferences into the Linux packaging process.
+5. Build, test, and sign each architecture's Linux package.
+6. Test on physical Chromebooks from multiple device families and document known limitations.
+7. Publish packages only after the matching builds pass testing.
 
-See [Chromebook notes](docs/chromebook.md), [upstream build notes](docs/build-from-source.md), and [Cloudflare deployment instructions](docs/cloudflare.md).
+See [Chromebook notes](docs/chromebook.md), [upstream build notes](docs/build-from-source.md), [homepage configuration](docs/homepage-configuration.md), and [Cloudflare deployment instructions](docs/cloudflare.md).
 
 ## Upstream project and trademarks
 
